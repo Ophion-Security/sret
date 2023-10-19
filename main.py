@@ -19,9 +19,10 @@ def salesforce_tester(dump_records:bool, dump_output_dir: str, url:str, uri:str,
 		return {'vulnerable':False}
 	
 	available_custom_objects = tester.get_custom_objects()
+	available_extended_objects = tester.get_extended_objects()
 	with open(SALESFORCE_AURA_STANDARD_OBJECTS_LIST_FILENAME) as f: 
 		available_standard_objects = f.read().split()
-	available_objects = sorted(list(set(available_custom_objects + available_standard_objects)))
+	available_objects = sorted(list(set(available_custom_objects + available_extended_objects + available_standard_objects)))
 
 	if (available_objects is not None):
 		# test object access

